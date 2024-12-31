@@ -1,5 +1,6 @@
 import pygame
 import random
+import math
 
 # Initialize pygame
 pygame.init()
@@ -40,6 +41,8 @@ bulletX_change = 0
 bulletY_change = 1
 bullet_state = "ready"
 
+score = 0
+
 def player(x,y):
     screen.blit(playerImg,(x,y))     # Puts the player on the screen
 
@@ -50,6 +53,13 @@ def fire_bullet(x,y):
     global bullet_state
     bullet_state = "fire"
     screen.blit(bulletImg,(x + 16 ,y + 10))
+
+def isCollision(enemyX,enemyY,bulletX,bulletY):
+    distance = math.sqrt((math.pow(enemyX-bulletX,2)) + (math.pow(enemyY-bulletY,2)))
+    if distance < 27:
+        return True
+    else:
+        return False
 
 # Game Loop
 running = True
@@ -68,9 +78,9 @@ while running:
         # If keystroke is pressed check whether its left or right
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                playerX_change = -0.3
+                playerX_change = -0.6
             if event.key == pygame.K_RIGHT:
-                playerX_change = +0.3
+                playerX_change = +0.6
             if event.key == pygame.K_SPACE:
                 if bullet_state == "ready":
                     bulletX = playerX
@@ -91,10 +101,10 @@ while running:
     enemyX +=enemyX_change
 
     if enemyX<=0:
-        enemyX_change = 0.25
+        enemyX_change = 0.3
         enemyY += enemyY_change
     elif enemyX>=736:
-        enemyX_change = -0.25
+        enemyX_change = -0.3
         enemyY += enemyY_change
 
     # Bullet Movement
@@ -102,9 +112,19 @@ while running:
         bulletY = 480
         bullet_state = "ready"
 
-    if bullet_state is "fire":
+    if bullet_state == "fire":
         fire_bullet(bulletX,bulletY)
         bulletY -=bulletY_change
+
+    # Collision
+    collision = isCollision(enemyX,enemyY,bulletX,bulletY)
+    if collision:
+        bulletY=480
+        bullet_state = "ready"
+        score +=1
+        print(score)
+        enemyX = random.randint(0,736)
+        enemyY = random.randint(50,150)
 
     player(playerX,playerY)
     enemy(enemyX,enemyY)
