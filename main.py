@@ -45,7 +45,7 @@ bulletImg = pygame.image.load('bullet.png')
 bulletX = 0
 bulletY = 480
 bulletX_change = 0
-bulletY_change = 1
+bulletY_change = 1.3
 bullet_state = "ready"
 
 score = 0
@@ -85,9 +85,9 @@ while running:
         # If keystroke is pressed check whether its left or right
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                playerX_change = -0.6
+                playerX_change = -0.8
             if event.key == pygame.K_RIGHT:
-                playerX_change = +0.6
+                playerX_change = +0.8
             if event.key == pygame.K_SPACE:
                 if bullet_state == "ready":
                     bulletX = playerX
@@ -108,10 +108,10 @@ while running:
     for i in range(no_of_enemies):
         enemyX[i] +=enemyX_change[i]
         if enemyX[i]<=0:
-            enemyX_change[i] = 0.3
+            enemyX_change[i] = 0.5
             enemyY[i] += enemyY_change[i]
         elif enemyX[i]>=736:
-            enemyX_change[i] = -0.3
+            enemyX_change[i] = -0.5
             enemyY[i] += enemyY_change[i]
 
         # Collision
